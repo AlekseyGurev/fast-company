@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import api from "../API";
 
-const table = document.querySelector("#table");
 const Users = () => {
+  let table = document.querySelector("#table");
   const [users, setUsers] = useState(api.users.fetchAll());
 
   const handleDelete = (userId) => {
