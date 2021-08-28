@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import api from "../API";
 
 const Users = () => {
-  let table = document.querySelector("#table");
   const [users, setUsers] = useState(api.users.fetchAll());
+  let tableClasses = "table";
 
   const handleDelete = (userId) => {
     setUsers(users.filter((user) => user._id !== userId));
@@ -14,10 +14,14 @@ const Users = () => {
     if (number === 0) {
       classes += "danger";
       result = `Никто не тусанет сегодня с тобой`;
-      table.classList.add("d-none");
+      tableClasses += " d-none";
     } else {
       classes += "primary";
-      result = `${number} человек тусанет с тобой сегодня`;
+      if ((number > 1) & (number < 5)) {
+        result = `${number} человека тусанет с тобой сегодня`;
+      } else {
+        result = `${number} человек тусанет с тобой сегодня`;
+      }
     }
     return (
       <h2>
@@ -62,7 +66,7 @@ const Users = () => {
   return (
     <React.Fragment>
       {renderPhrase(users.length)}
-      <table className="table" id="table">
+      <table className={tableClasses} id="table">
         <thead>
           <tr>
             <th scope="col">Имя</th>
