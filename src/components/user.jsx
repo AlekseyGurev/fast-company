@@ -1,86 +1,37 @@
-import React, { useState } from "react";
-import api from "../API";
+import React from "react";
+import Qualitie from "./qualitie";
+import BookMark from "./bookmark";
 
-const Users = () => {
-  const [users, setUsers] = useState(api.users.fetchAll());
-  let tableClasses = "table";
-
-  const handleDelete = (userId) => {
-    setUsers(users.filter((user) => user._id !== userId));
-  };
-  const renderPhrase = (number) => {
-    let classes = "h1 badge bg-";
-    let result;
-    if (number === 0) {
-      classes += "danger";
-      result = `Никто не тусанет сегодня с тобой`;
-      tableClasses += " d-none";
-    } else {
-      classes += "primary";
-      if ((number > 1) & (number < 5)) {
-        result = `${number} человека тусанет с тобой сегодня`;
-      } else {
-        result = `${number} человек тусанет с тобой сегодня`;
-      }
-    }
-    return (
-      <h2>
-        <span className={classes}>{result}</span>
-      </h2>
-    );
-  };
-
-  const userRow = (user) => {
-    return (
-      <tr key={user._id}>
-        <td>{user.name}</td>
-        <td>{user.qualities.map((qualitie) => userQualitiesCol(qualitie))}</td>
-        <td>{user.profession.name}</td>
-        <td>{user.completedMeetings}</td>
-        <td>{user.rate}</td>
-        <td>
-          <button
-            onClick={() => handleDelete(user._id)}
-            className="btn btn-danger btn-sm"
-          >
-            Удалить
-          </button>
-        </td>
-      </tr>
-    );
-  };
-
-  const userQualitiesCol = (qualitie) => {
-    return (
-      <span key={qualitie._id} className={getBageclasses(qualitie.color)}>
-        {qualitie.name}
-      </span>
-    );
-  };
-
-  const getBageclasses = (color) => {
-    let classes = `badge m-2 bg-${color}`;
-    return classes;
-  };
-
+const User = ({ user, onDelete, status, onBookMark }) => {
   return (
-    <React.Fragment>
-      {renderPhrase(users.length)}
-      <table className={tableClasses} id="table">
-        <thead>
-          <tr>
-            <th scope="col">Имя</th>
-            <th scope="col">Качества</th>
-            <th scope="col">Профессия</th>
-            <th scope="col">Встретился,раз</th>
-            <th scope="col">Оценка</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>{users.map((user) => userRow(user))}</tbody>
-      </table>
-    </React.Fragment>
+    <tr>
+      <td>{user.name}</td>
+      <td>
+        {user.qualities.map((qualitie) => (
+          <Qualitie
+            key={qualitie._id}
+            color={qualitie.color}
+            id={qualitie._id}
+            name={qualitie.name}
+          />
+        ))}
+      </td>
+      <td>{user.profession.name}</td>
+      <td>{user.completedMeetings}</td>
+      <td>{user.rate}</td>
+      <td>
+        <BookMark status={status} id={user._id} onBookMark={onBookMark} />
+      </td>
+      <td>
+        <button
+          onClick={() => onDelete(user._id)}
+          className="btn btn-danger btn-sm"
+        >
+          Удалить
+        </button>
+      </td>
+    </tr>
   );
 };
 
-export default Users;
+export default User;
