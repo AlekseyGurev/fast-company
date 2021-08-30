@@ -20,7 +20,7 @@ const App = () => {
   const handleBookMark = (userId) => {
     setUsers(
       users.map((user) => {
-        if (user.id === userId) {
+        if (user._id === userId) {
           user.status = true;
         }
         return user;
