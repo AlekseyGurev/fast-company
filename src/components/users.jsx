@@ -1,7 +1,7 @@
 import React from "react";
 import User from "./user";
 
-const Users = ({ users, onDelete, onBookMark }) => {
+const Users = ({ users, ...rest }) => {
   let tableClasses = "table";
   if (users.length === 0) {
     tableClasses += " d-none";
@@ -21,14 +21,7 @@ const Users = ({ users, onDelete, onBookMark }) => {
       </thead>
       <tbody>
         {users.map((user) => (
-          <User
-            key={user._id}
-            user={user}
-            onDelete={onDelete}
-            status={user.status}
-            id={user._id}
-            onBookMark={onBookMark}
-          />
+          <User key={user._id} {...rest} {...user} />
         ))}
       </tbody>
     </table>

@@ -4,14 +4,7 @@ import SearchStatus from "./components/searchStatus";
 import api from "./API";
 
 const App = () => {
-  const initialState = api.users.fetchAll();
-
-  const [users, setUsers] = useState(
-    initialState.map((user) => {
-      user.status = false;
-      return user;
-    })
-  );
+  const [users, setUsers] = useState(api.users.fetchAll());
 
   const handleDelete = (userId) => {
     setUsers(users.filter((user) => user._id !== userId));
@@ -21,7 +14,7 @@ const App = () => {
     setUsers(
       users.map((user) => {
         if (user._id === userId) {
-          user.status = true;
+          user.status = !user.status;
         }
         return user;
       })

@@ -5,13 +5,15 @@ const BookMark = ({ status, id, onBookMark }) => {
   const classBookMark = (status) => {
     let classes = "bi bi-bookmark";
     if (status) {
-      return (classes += "-fill");
+      return (classes += "-heart-fill");
     } else {
       return classes;
     }
   };
   return (
-    <i onClick={() => onBookMark(id)} className={classBookMark(status)}></i>
+    <button onClick={() => onBookMark(id)} className="btn btn-secondary">
+      <i className={classBookMark(status)}></i>
+    </button>
   );
 };
 
