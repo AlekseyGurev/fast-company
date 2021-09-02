@@ -47,7 +47,7 @@ User.propTypes = {
     completedMeetings: PropTypes.number.isRequired,
     rate: PropTypes.number.isRequired,
     onDelete: PropTypes.func.isRequired,
-    status: PropTypes.any.isRequired,
+    status: PropTypes.bool.isRequired,
     onBookMark: PropTypes.func.isRequired
 };
 
