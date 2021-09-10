@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import GroupList from "./groupList";
 import api from "../API";
 import SearchStatus from "./searchStatus";
+import _ from "lodash";
 
 const Users = ({ users: allUsers, ...rest }) => {
     let tableClasses = "table";
@@ -29,7 +30,7 @@ const Users = ({ users: allUsers, ...rest }) => {
         setSelectedProf(item);
     };
     const filteredUsers = selectedProf
-        ? allUsers.filter((user) => (user.profession.name === selectedProf.name))
+        ? allUsers.filter((user) => _.isEqual(user.profession, selectedProf))
         : allUsers;
 
     const count = filteredUsers.length;
