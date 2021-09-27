@@ -36,9 +36,7 @@ const User = ({
         </tr>
     );
 };
-User.defaultProps = {
-    status: false
-};
+
 User.propTypes = {
     _id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
