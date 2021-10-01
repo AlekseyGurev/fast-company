@@ -1,52 +1,55 @@
-import React from "react";
-import Qualitie from "./qualitie";
-import BookMark from "./bookmark";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import api from "../API";
+import QualitiesList from "./qualitiesList";
+import { useHistory } from "react-router-dom";
 
-const User = ({
-    _id,
-    name,
-    qualities,
-    profession,
-    completedMeetings,
-    rate,
-    onDelete,
-    status,
-    onBookMark
-}) => {
-    return (
-        <tr>
-            <td>{name}</td>
-            <td>
-                {qualities.map((qualitie) => (
-                    <Qualitie key={qualitie._id} {...qualitie} />
-                ))}
-            </td>
-            <td>{profession.name}</td>
-            <td>{completedMeetings}</td>
-            <td>{rate}</td>
-            <td>
-                <BookMark status={status} id={_id} onBookMark={onBookMark} />
-            </td>
-            <td>
-                <button onClick={() => onDelete(_id)} className="btn btn-danger btn-sm">
-          Удалить
-                </button>
-            </td>
-        </tr>
+const User = ({ userId }) => {
+    const [user, setUser] = useState();
+    const history = useHistory();
+    useEffect(() => {
+        api.users.getById(userId).then((userData) => {
+            setUser(userData);
+        }, []);
+    });
+    const goToAllUsers = () => {
+        history.push("/users");
+    };
+    const userRender = (user) => {
+        return (
+            <div className="container">
+                <ul className="list-unstyled" >
+                    <li>
+                        <h1>{user.name}</h1>
+                    </li>
+                    <li>
+                        <h3>Профессия: {user.profession.name}</h3>
+                    </li>
+                    <li>
+                        <QualitiesList qualities={user.qualities}/>
+                    </li>
+                    <li>
+                        <p>completedMeetings:{user.completedMeetings}</p>
+                    </li>
+                    <li>
+                        <h1>Rate:{user.rate}</h1>
+                    </li>
+                </ul>
+                <button
+                    onClick={() => {
+                        goToAllUsers();
+                    }}
+                    type="button" className="btn btn-success">Все пользователи</button>
+            </div>
+        );
+    };
+    return (<>
+        { user ? (userRender(user)) : (<h1>loading</h1>)}
+    </>
     );
 };
 
 User.propTypes = {
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    qualities: PropTypes.array.isRequired,
-    profession: PropTypes.object.isRequired,
-    completedMeetings: PropTypes.number.isRequired,
-    rate: PropTypes.number.isRequired,
-    onDelete: PropTypes.func.isRequired,
-    status: PropTypes.bool.isRequired,
-    onBookMark: PropTypes.func.isRequired
+    userId: PropTypes.string
 };
-
 export default User;
