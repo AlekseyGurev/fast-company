@@ -43,4 +43,4 @@ export function validator(data, config) {
         }
     }
     return errors;
-};
+}
