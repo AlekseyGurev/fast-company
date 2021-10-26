@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "./pagination";
-import { paginate } from "../utils/paginate";
-import GroupList from "./groupList";
-import api from "../API";
-import SearchStatus from "./searchStatus";
+import Pagination from "../../common/pagination";
+import { paginate } from "../../../utils/paginate";
+import GroupList from "../../common/groupList";
+import api from "../../../API";
+import SearchStatus from "../../ui/searchStatus";
 import _ from "lodash";
-import UsersTable from "./usersTable";
-import SearchUsers from "./searchUsers";
-import { searchUserText } from "../utils/searchUserText";
+import UsersTable from "../../ui/usersTable";
+import SearchUsers from "../../searchUsers";
+import { searchUserText } from "../../../utils/searchUserText";
 
-const UsersList = () => {
+const UsersListPage = () => {
     const pageSize = 6;
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfession] = useState();
@@ -75,7 +75,7 @@ const UsersList = () => {
             setSelectedProf();
             setSearchUser("");
         };
-        return (<>
+        return (
             <div className="d-flex">
                 {professions && (
                     <div className="d-flex flex-column flex-shrink-0 p-3">
@@ -110,9 +110,10 @@ const UsersList = () => {
                     </div>
                 </div>
             </div>
-        </>);
+
+        );
     }
     return <h1>loading</h1>;
 };
 
-export default UsersList;
+export default UsersListPage;
