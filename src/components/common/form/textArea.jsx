@@ -8,6 +8,7 @@ const TextArea = ({ name, rows, onChange, value }) => {
             className="form-control"
             id="exampleFormControlTextarea1"
             rows={rows} onChange={onChange}
+            value={value}
         >
             {value}
         </textarea>
