@@ -1,55 +1,51 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import api from "../../../API";
-import Qualities from "../../ui/qualities";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import EditForm from "../../ui/editFrom";
+import UserCard from "../../ui/userPage/userCard";
+import QualitiesCard from "../../ui/userPage/qualitiesCard";
+import MeetingsCard from "../../ui/userPage/meetingsCard";
+import CommentsListComponent from "../../ui/userPage/commentsListComponent";
 
 const User = ({ userId }) => {
     const [user, setUser] = useState();
-    const history = useHistory();
     const params = useParams();
     const { edit } = params;
     useEffect(() => {
         api.users.getById(userId).then((userData) => {
             setUser(userData);
-        }, []);
-    });
-    const goToEdit = () => {
-        history.push(`${userId}/edit`);
-    };
+        });
+    }, []);
     const userRender = (user) => {
         return <>
             { edit === "edit"
                 ? <EditForm userId = {userId}/>
                 : <div className="container">
-                    <ul className="list-unstyled" >
-                        <li>
-                            <h1>{user.name}</h1>
-                        </li>
-                        <li>
-                            <h3>Профессия: {user.profession.name}</h3>
-                        </li>
-                        <li>
-                            <Qualities qualities={user.qualities}/>
-                        </li>
-                        <li>
-                            <p>completedMeetings:{user.completedMeetings}</p>
-                        </li>
-                        <li>
-                            <h1>Rate:{user.rate}</h1>
-                        </li>
-                    </ul>
-                    <button
-                        onClick={() => {
-                            goToEdit();
-                        }}
-                        type="button" className="btn btn-success">Изменить</button>
-                </div>}
+                    <div className="row gutters-sm">
+                        <div className="col-md-4 mb-3">
+                            <UserCard
+                                name = {user.name}
+                                rate = {user.rate}
+                                profession={user.profession.name}
+                                userId={userId}
+                            />
+                            <QualitiesCard qualities={user.qualities}/>
+                            <MeetingsCard meetings={user.completedMeetings}/>
+                        </div>
+                        <div className="col-md-8">
+                            <CommentsListComponent userId={userId}
+                            />
+                        </div>
+                    </div> </div>}
         </>;
     };
     return (<>
-        { user ? (userRender(user)) : (<h1>loading</h1>)}
+        { user
+            ? (userRender(user))
+            : (<div className="container">
+                <h1>loading...</h1>
+            </div>)}
     </>
     );
 };
