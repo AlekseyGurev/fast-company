@@ -8,6 +8,7 @@ import _ from "lodash";
 import UsersTable from "../../ui/usersTable";
 import SearchUsers from "../../searchUsers";
 import { searchUserText } from "../../../utils/searchUserText";
+import { useUser } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
     const pageSize = 6;
@@ -15,27 +16,24 @@ const UsersListPage = () => {
     const [professions, setProfession] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
-    const [users, setUsers] = useState();
     const [searchUser, setSearchUser] = useState("");
-    useEffect(() => {
-        api.users.fetchAll().then((data) => {
-            setUsers(data);
-        }, []);
-    });
+
+    const { users } = useUser();
 
     const handleDelete = (userId) => {
-        setUsers(users.filter((user) => user._id !== userId));
+        // setUsers(users.filter((user) => user._id !== userId));
+        console.log(userId);
     };
 
     const handleBookMark = (userId) => {
-        setUsers(
+        const newArray =
             users.map((user) => {
                 if (user._id === userId) {
                     user.bookmark = !user.bookmark;
                 }
                 return user;
-            })
-        );
+            });
+        console.log(newArray);
     };
     useEffect(() => {
         api.professions.fetchAll().then((data) => {
