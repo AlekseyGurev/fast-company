@@ -4,14 +4,11 @@ import Qualitie from "../qualities/qualitie";
 import { useQualities } from "../../../hooks/useQualities";
 
 const QualitiesList = ({ qualities }) => {
-    const { getQualityId } = useQualities();
-    const newArray = [];
-    qualities.forEach(element => {
-        newArray.push(getQualityId(element));
-    });
+    const { isLoading } = useQualities();
+    if (isLoading) return "Loading...";
     return <>
-        {newArray.map((qualitie) => (
-            <Qualitie key={qualitie._id} {...qualitie} />
+        {qualities.map((qualitie) => (
+            <Qualitie key={qualitie} id={qualitie} />
         ))}
     </>;
 };
