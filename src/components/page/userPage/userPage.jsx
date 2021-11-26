@@ -18,35 +18,46 @@ const User = ({ userId }) => {
         });
     }, []);
     const userRender = (user) => {
-        return <>
-            { edit === "edit"
-                ? <EditForm userId = {userId}/>
-                : <div className="container">
-                    <div className="row gutters-sm">
-                        <div className="col-md-4 mb-3">
-                            <UserCard
-                                name = {user.name}
-                                rate = {user.rate}
-                                profession={user.profession.name}
-                                userId={userId}
-                            />
-                            <QualitiesCard qualities={user.qualities}/>
-                            <MeetingsCard meetings={user.completedMeetings}/>
+        return (
+            <>
+                {edit === "edit"
+                    ? (
+                        <EditForm userId={userId} />
+                    )
+                    : (
+                        <div className="container">
+                            <div className="row gutters-sm">
+                                <div className="col-md-4 mb-3">
+                                    <UserCard
+                                        name={user.name}
+                                        rate={user.rate}
+                                        profession={user.profession.name}
+                                        userId={userId}
+                                    />
+                                    <QualitiesCard qualities={user.qualities} />
+                                    <MeetingsCard meetings={user.completedMeetings} />
+                                </div>
+                                <div className="col-md-8">
+                                    <CommentsListComponent userId={userId} />
+                                </div>
+                            </div>{" "}
                         </div>
-                        <div className="col-md-8">
-                            <CommentsListComponent userId={userId}
-                            />
-                        </div>
-                    </div> </div>}
-        </>;
+                    )}
+            </>
+        );
     };
-    return (<>
-        { user
-            ? (userRender(user))
-            : (<div className="container">
-                <h1>loading...</h1>
-            </div>)}
-    </>
+    return (
+        <>
+            {user
+                ? (
+                    userRender(user)
+                )
+                : (
+                    <div className="container">
+                        <h1>loading...</h1>
+                    </div>
+                )}
+        </>
     );
 };
 
