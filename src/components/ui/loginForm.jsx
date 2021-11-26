@@ -9,6 +9,7 @@ import { useHistory } from "react-router";
 const Login = () => {
     const [data, setData] = useState({ email: "", password: "", stayOn: false });
     const [errors, setErrors] = useState({});
+    const [enterError, setEnterError] = useState(null);
     const history = useHistory();
     const { signIn } = useAuth();
     const handleChange = (target) => {
@@ -16,31 +17,18 @@ const Login = () => {
             ...prevState,
             [target.name]: target.value
         }));
+        setEnterError(null);
     };
     const validatorConfig = {
         email: {
             isRequired: {
                 message: "Эдектронная почта обязательна для заполнения"
-            },
-            isEmail: {
-                message: "Эдектронная почта введена не корректно"
             }
         },
         password: {
             isRequired: {
                 message: "Пароль обязателен для заполнения"
-            },
-            isCapitalSymbol: {
-                message: "Пароль должен содержать заглавную букву"
-            },
-            isContainDigit: {
-                message: "Пароль должен содержать цифру"
-            },
-            min: {
-                value: 8,
-                message: "Пароль должен быть больше 7 символов"
             }
-
         }
     };
     useEffect(() => {
@@ -60,7 +48,7 @@ const Login = () => {
             await signIn(data);
             history.push("/");
         } catch (error) {
-            setErrors(error);
+            setEnterError(error.message);
         }
     };
     return (
@@ -87,7 +75,8 @@ const Login = () => {
             >
                     Отстаться в системе
             </CheckBoxField>
-            <button disabled={!isValid}
+            {enterError && <p className="text-danger">{enterError}</p>}
+            <button disabled={!isValid || enterError}
                 className="btn btn-primary w-100 mx-auto"
             >
                             Submit
