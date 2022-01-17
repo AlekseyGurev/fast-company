@@ -2,28 +2,25 @@ import React, { useState, useEffect } from "react";
 import Pagination from "../../common/pagination";
 import { paginate } from "../../../utils/paginate";
 import GroupList from "../../common/groupList";
-import api from "../../../API";
 import SearchStatus from "../../ui/searchStatus";
 import _ from "lodash";
 import UsersTable from "../../ui/usersTable";
 import SearchUsers from "../../searchUsers";
 import { searchUserText } from "../../../utils/searchUserText";
 import { useUser } from "../../../hooks/useUsers";
+import { useProfession } from "../../../hooks/useProfession";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UsersListPage = () => {
     const pageSize = 6;
+    const { isloading: professionsLoading, professions } = useProfession();
     const [currentPage, setCurrentPage] = useState(1);
-    const [professions, setProfession] = useState();
+    const { currentUser } = useAuth();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
     const [searchUser, setSearchUser] = useState("");
 
     const { users } = useUser();
-
-    const handleDelete = (userId) => {
-        // setUsers(users.filter((user) => user._id !== userId));
-        console.log(userId);
-    };
 
     const handleBookMark = (userId) => {
         const newArray =
@@ -35,11 +32,6 @@ const UsersListPage = () => {
             });
         console.log(newArray);
     };
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => {
-            setProfession(data);
-        });
-    }, []);
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
@@ -55,12 +47,15 @@ const UsersListPage = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
+    function filterUsers(data) {
+        const filteredUsers = searchUser !== ""
+            ? data.filter((user) => searchUserText(user.name, searchUser))
+            : (selectedProf ? data.filter((user) => _.isEqual(user.profession, selectedProf)) : data);
+        return filteredUsers.filter((u) => u._id !== currentUser._id);
+    }
 
     if (users) {
-        const filteredUsers = searchUser !== ""
-            ? users.filter((user) => searchUserText(user.name, searchUser))
-            : (selectedProf ? users.filter((user) => _.isEqual(user.profession, selectedProf)) : users);
-
+        const filteredUsers = filterUsers(users);
         const count = filteredUsers.length;
         const handleSearch = ({ target }) => {
             clearFilter();
@@ -75,7 +70,7 @@ const UsersListPage = () => {
         };
         return (
             <div className="d-flex">
-                {professions && (
+                {professions && !professionsLoading && (
                     <div className="d-flex flex-column flex-shrink-0 p-3">
                         <GroupList
                             items={professions}
@@ -95,7 +90,6 @@ const UsersListPage = () => {
                         count={count}
                         onSort = {handleSort}
                         selectedSort = {sortBy}
-                        onDelete = {handleDelete}
                         onBookMark = {handleBookMark}
                     />
                     <div className="d-flex justify-content-center">

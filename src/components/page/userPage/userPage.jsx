@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import api from "../../../API";
 import { useParams } from "react-router-dom";
+import { useUser } from "../../../hooks/useUsers";
 import EditForm from "../../ui/editFrom";
 import UserCard from "../../ui/userPage/userCard";
 import QualitiesCard from "../../ui/userPage/qualitiesCard";
 import MeetingsCard from "../../ui/userPage/meetingsCard";
-import CommentsListComponent from "../../ui/userPage/commentsListComponent";
+import { CommentsProvider } from "../../../hooks/useComments";
+import Comments from "../../ui/comments";
 
 const User = ({ userId }) => {
-    const [user, setUser] = useState();
+    const { getUserById } = useUser();
+    const user = getUserById(userId);
     const params = useParams();
     const { edit } = params;
-    useEffect(() => {
-        api.users.getById(userId).then((userData) => {
-            setUser(userData);
-        });
-    }, []);
     const userRender = (user) => {
         return (
             <>
@@ -38,7 +35,9 @@ const User = ({ userId }) => {
                                     <MeetingsCard meetings={user.completedMeetings} />
                                 </div>
                                 <div className="col-md-8">
-                                    <CommentsListComponent userId={userId} />
+                                    <CommentsProvider>
+                                        <Comments />
+                                    </CommentsProvider>
                                 </div>
                             </div>{" "}
                         </div>

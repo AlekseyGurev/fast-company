@@ -1,17 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UserCard = ({ name, profession, rate, userId }) => {
+    const { currentUser } = useAuth();
     const history = useHistory();
     const goToEdit = () => {
         history.push(`/users/${userId}/edit`);
     };
     return (<div className="card mb-3">
         <div className="card-body">
+            { userId === currentUser._id &&
             <button className="position-absolute top-0 end-0 btn btn-light btn-sm"onClick={goToEdit} >
                 <i className="bi bi-gear"></i>
-            </button>
+            </button> }
             <div className="d-flex flex-column align-items-center text-center position-relative">
                 <img
                     src={`https://avatars.dicebear.com/api/avataaars/${(

@@ -38,6 +38,7 @@ export const ProfessionProvider = ({ children }) => {
             errorCatcher(error);
         }
     }
+
     function errorCatcher(error) {
         const { message } = error.response.data;
         setError(message);

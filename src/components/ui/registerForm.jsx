@@ -13,7 +13,7 @@ import { useHistory } from "react-router-dom";
 
 const RegisterForm = () => {
     const history = useHistory();
-    const [data, setData] = useState({ email: "", password: "", profession: "", sex: "male", qualities: [], licence: false });
+    const [data, setData] = useState({ email: "", password: "", profession: "", name: "", sex: "male", qualities: [], licence: false });
     const { singUp } = useAuth();
     const [errors, setErrors] = useState({});
     const { qualities } = useQualities();
@@ -33,6 +33,11 @@ const RegisterForm = () => {
             },
             isEmail: {
                 message: "Эдектронная почта введена не корректно"
+            }
+        },
+        name: {
+            isRequired: {
+                message: "Имя должно быть заполнено"
             }
         },
         password: {
@@ -91,6 +96,13 @@ const RegisterForm = () => {
                 value={data.email}
                 onChange={handleChange}
                 error = {errors.email}
+            />
+            <TextField
+                label = "Name"
+                name="name"
+                value={data.name}
+                onChange={handleChange}
+                error = {errors.name}
             />
             <TextField
                 label = "Password"

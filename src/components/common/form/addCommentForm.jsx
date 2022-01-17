@@ -1,61 +1,35 @@
-import React, { useState, useEffect } from "react";
-import SelectedFieldsUserComment from "./selectedFieldsUserComment";
+import React, { useState } from "react";
 import TextArea from "./textArea";
 import PropTypes from "prop-types";
-import api from "../../../API";
+const initialData = { userId: " ", content: " " };
 
-const AddCommentForm = ({ userId, updateComments }) => {
-    const [commentsTextAdd, setCommentsTextAdd] = useState();
-    const [commentsUserAdd, setCommentsUserAdd] = useState("");
-    const [usersForSelect, setUsersForSelect] = useState();
+const AddCommentForm = ({ onSubmit }) => {
+    const [data, setData] = useState(initialData);
 
-    useEffect(() => {
-        api.users.fetchAll().then((userData) => {
-            setUsersForSelect(userData.map((data) => ({
-                name: data.name,
-                value: data._id
-            })));
-        });
-    }, []);
-
-    const submitComment = (e) => {
-        e.preventDefault();
-        const data = {
-            content: commentsTextAdd,
-            pageId: userId,
-            userId: commentsUserAdd
-        };
-        api.comments.add(data);
-        updateComments();
-        setCommentsTextAdd(" ");
-        setCommentsUserAdd("");
-    };
-    const handleChangeUserComment = ({ target }) => {
-        setCommentsUserAdd(target.value);
-    };
     const handleChangeTextCooment = ({ target }) => {
-        setCommentsTextAdd(target.value);
+        setData((prevState) => ({
+            ...prevState, [target.name]: target.value
+        }));
+    };
+
+    const hundleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(data);
     };
     return (<div className="card-body ">
         <h2>New comments</h2>
         <hr />
         <form className="container d-flex flex-column">
 
-            <SelectedFieldsUserComment
-                options={usersForSelect}
-                onChange={handleChangeUserComment}
-                label = "Выберете пользователя"
-                defaultOption="Choose..."
-                value={commentsUserAdd}
-            />
             <TextArea
-                name={"Сообщение"}
+                name="content"
                 rows={"3"}
                 onChange={handleChangeTextCooment}
-                value={commentsTextAdd}
+                value={data.content}
+                label="Сообщение"
             />
             <div className="d-flex justify-content-end">
-                <button onClick={submitComment}
+                <button onClick={hundleSubmit}
                     className="btn btn-primary"
                 >
                       Сохранить
@@ -66,7 +40,7 @@ const AddCommentForm = ({ userId, updateComments }) => {
 };
 
 AddCommentForm.propTypes = {
-    userId: PropTypes.string,
+    onSubmit: PropTypes.func,
     updateComments: PropTypes.func
 };
 

@@ -6,20 +6,14 @@ import Qualities from "../ui/qualities";
 import Table, { TableHeader, TableBody } from "../common/table";
 import Profession from "./profession";
 
-const UsersTable = ({ count, users, onSort, selectedSort, onBookMark, onDelete, ...rest }) => {
+const UsersTable = ({ count, users, onSort, selectedSort, onBookMark, ...rest }) => {
     const columns = {
         name: { path: "name", name: "Имя" },
         qualities: { name: "Качества", component: (user) => (<Qualities qualities={ user.qualities }/>) },
         profession: { name: "Профессия", component: (user) => <Profession id={user.profession}/> },
         completedMeetings: { path: "completedMeetings", name: "Встретился,раз" },
         rate: { path: "rate", name: "Оценка" },
-        bookMark: { path: "bookMark", name: "Избранное", component: (user) => (<BookMark status={user.bookmark} onClick={() => onBookMark(user._id)} />) },
-        delete: {
-            component: (user) => (<button onClick={() => onDelete(user._id)} className="btn btn-danger btn-sm">
-            Удалить
-            </button>)
-
-        }
+        bookMark: { path: "bookMark", name: "Избранное", component: (user) => (<BookMark status={user.bookmark} onClick={() => onBookMark(user._id)} />) }
     };
     return (
         <Table onSort={onSort} selectedSort={selectedSort} columns = {columns} data = {users} count={count}>
@@ -35,8 +29,7 @@ UsersTable.propTypes = {
     selectedSort: PropTypes.object.isRequired,
     onSort: PropTypes.func.isRequired,
     onBookMark: PropTypes.func.isRequired,
-    _id: PropTypes.func,
-    onDelete: PropTypes.func.isRequired
+    _id: PropTypes.func
 };
 
 export default UsersTable;
