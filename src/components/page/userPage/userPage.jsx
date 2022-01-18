@@ -19,7 +19,7 @@ const User = ({ userId }) => {
             <>
                 {edit === "edit"
                     ? (
-                        <EditForm userId={userId} />
+                        <EditForm />
                     )
                     : (
                         <div className="container">

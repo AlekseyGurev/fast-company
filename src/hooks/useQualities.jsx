@@ -31,6 +31,7 @@ export const QualitiesProvider = ({ children }) => {
     function errorCatch(error) {
         const { message } = error.response.data;
         setErrors(message);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -44,7 +45,8 @@ export const QualitiesProvider = ({ children }) => {
         <QualitiesContext.Provider
             value={{
                 qualities,
-                getQualityId
+                getQualityId,
+                isLoading
             }}
         >
             {!isLoading ? children : "<h1>Qualities Loading...</h1>"}
